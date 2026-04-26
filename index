@@ -11,7 +11,7 @@
             --bg-color: #f4f7f6;
         }
         body {
-            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             background-color: var(--bg-color);
             display: flex;
             justify-content: center;
@@ -34,7 +34,7 @@
             font-size: 1.5rem;
         }
         #display {
-            font-size: 3rem;
+            font-size: 2.5rem;
             font-weight: bold;
             color: var(--primary-color);
             height: 120px;
@@ -45,6 +45,8 @@
             border-radius: 15px;
             margin-bottom: 1.5rem;
             background: #fafafa;
+            word-break: break-all;
+            padding: 0 10px;
         }
         button {
             background-color: var(--primary-color);
@@ -54,13 +56,14 @@
             font-size: 1.2rem;
             border-radius: 50px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             width: 100%;
             box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+            outline: none;
         }
         button:hover {
+            background-color: #2980b9;
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
         }
         button:active {
             transform: translateY(0);
@@ -68,11 +71,7 @@
         button:disabled {
             background-color: #bdc3c7;
             cursor: not-allowed;
-        }
-        .footer {
-            margin-top: 1rem;
-            font-size: 0.8rem;
-            color: #95a5a6;
+            box-shadow: none;
         }
     </style>
 </head>
@@ -80,12 +79,12 @@
 
 <div class="container">
     <h1>🌍 随机国家抽取</h1>
-    <div id="display">点击开始</div>
+    <div id="display">准备好了吗？</div>
     <button id="drawBtn">开始抽取</button>
-    <div class="footer">包含地图上的 30 个国家</div>
 </div>
 
 <script>
+    // 对应你图片中的 30 个国家
     const countries = [
         "英国", "法国", "意大利", "西班牙", "希腊", "土耳其", "约旦", "伊朗", 
         "俄罗斯", "中国", "日本", "印度", "柬埔寨", "印度尼西亚", "澳大利亚", 
@@ -102,29 +101,29 @@
         
         isDrawing = true;
         btn.disabled = true;
+        btn.innerText = "抽取中...";
+        display.style.color = "#3498db";
+        
         let counter = 0;
-        const totalDuration = 2000; // 动画持续2秒
-        const intervalTime = 50;   // 每50毫秒跳一次
+        const duration = 2000; // 动画持续 2 秒
+        const interval = 50;   // 每 50 毫秒变换一次
         
         const timer = setInterval(() => {
             const randomIndex = Math.floor(Math.random() * countries.length);
             display.innerText = countries[randomIndex];
-            counter += intervalTime;
+            counter += interval;
             
-            if (counter >= totalDuration) {
+            if (counter >= duration) {
                 clearInterval(timer);
                 // 最终结果
                 const finalIndex = Math.floor(Math.random() * countries.length);
                 display.innerText = countries[finalIndex];
-                display.style.color = "#e74c3c"; // 结果显示为红色
-                
-                setTimeout(() => {
-                    display.style.color = "#3498db"; // 恢复颜色
-                    isDrawing = false;
-                    btn.disabled = false;
-                }, 500);
+                display.style.color = "#e74c3c"; // 中奖色
+                btn.disabled = false;
+                btn.innerText = "再抽一次";
+                isDrawing = false;
             }
-        }, intervalTime);
+        }, interval);
     });
 </script>
 
